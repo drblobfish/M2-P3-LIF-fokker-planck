@@ -76,10 +76,51 @@ $
 $
 p_(N-1)^m & =  p_(N-1)^(m+1) + underbrace(tau/h tilde(F)_(N-1/2)^m,=0) - tau/h tilde(F)_(N-1-1/2)^m \
           & =  p_(N-1)^(m+1) - tau/h tilde(F)_(N-2+1/2)^m \
-          & =  p_(N-1)^(m+1) + tau/h^2 a(N^m) M_(N-1+1/2) (p^(m+1)_(N-2+1)/M^m_(N-2+1) - p^(m+1)_(N-1)/M^m_(N-1))
-+ N^m underbrace(bb(1)_(v_(N-2+1/2) >= V_R),=1) \
+          & =  p_(N-1)^(m+1) + tau/h^2 a(N^m) M_(N-2+1/2) (p^(m+1)_(N-1)/M^m_(N-1) - p^(m+1)_(N-2)/M^m_(N-2))
++ tau/h N^m underbrace(bb(1)_(v_(N-2+1/2) >= V_R),=1) \
 $
 $
-p_(N-1)^m - N^m 
- & = (1 - tau/h^2 a(N^m) M_(N-1+1/2)/M^m_(N-1)) p^(m+1)_(N-1) + tau/h^2 a(N^m) M_(N-1+1/2)/M^m_(N-2+1) p^(m+1)_(N-2+1)
+p_(N-1)^m - tau/h N^m 
+ & = (1 + tau/h^2 a(N^m) M_(N-2+1/2)/M^m_(N-1)) p^(m+1)_(N-1) - tau/h^2 a(N^m) M_(N-2+1/2)/M^m_(N-2) p^(m+1)_(N-2)
 $
+
+------
+
+Avec $alpha = tau/h^2 a(N^m)$
+
+$
+mat(
+1 + alpha M_(1+1/2)/M^m_(1) ,
+- alpha M_(1+1/2)/M^m_(2);
+
+- alpha M_(1+1/2)/M^m_(1),
+1 + alpha (M_(2+1/2) + M_(1+1/2))/M^m_(2),
+- alpha M_(2+1/2)/M^m_(3);
+
+,dots.down,dots.down,dots.down;
+
+,,- alpha M_(N-3+1/2)/M^m_(N-3),
+1 + alpha (M_(N-2+1/2) + M_(N-3+1/2))/M^m_(N-2),
+- alpha M_(N-2+1/2)/M^m_(N-1);
+
+,,,-alpha M_(N-2+1/2)/M^m_(N-2),
+1 + alpha M_(N-2+1/2)/M^m_(N-1)
+)
+mat(
+  p^(m+1)_1;
+  p^(m+1)_2;
+  dots.v;
+  p^(m+1)_(N-2);
+  p^(m+1)_(N-1);
+)
+=
+mat(
+  tilde(p)^(m+1)_1;
+  tilde(p)^(m+1)_2;
+  dots.v;
+  tilde(p)^(m+1)_(N-2);
+  tilde(p)^(m+1)_(N-1);
+)
+$
+
+Où $p^(m+1)$ est obtenu de $tilde(p)^(m+1)$ en soustrayant et en ajoutant $tau/h N^m$ aux posititons $N-1$ et $V_R$ respectivement.
