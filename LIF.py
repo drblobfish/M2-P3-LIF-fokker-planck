@@ -30,7 +30,7 @@ def stationnary_initial_cond(N_inf,a0,b,VF,Vmin,VR,h,N=None):
     integral_full = np.repeat(integral[0],v.shape[0])
     integral_full[-integral.shape[0]:] = integral
     p = N_inf/a0 * np.exp(- 0.5 * (- v + b * N_inf)**2/a0) * integral_full
-    return p,v
+    return p[1:-1],v
 
 def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmonic_mean = False):
     if N == None:
