@@ -26,13 +26,11 @@ def stationnary_initial_cond(N_inf,a0,b,VF,Vmin,VR,h,N=None):
     VR_index = int(np.round((VR-Vmin)*N/(VF-Vmin)))
     max_v_VR = v.copy()
     max_v_VR[:VR_index+1] = VR
-    return 2 * N_inf * np.exp(0.5 * (b * N_inf - (v - b * N_inf)**2)/a0) * (np.exp(-0.5 * max_v_VR/a0) - np.exp(-0.5 * VF/a0)),v
-
-p,v = stationnary_initial_cond(0.1924,1,1.5,2,-4,1,0.02)
-p.shape
-v.shape
-plt.plot(v,p)
-plt.show()
+    integral = np.cumsum(h*np.exp(0.5 * (- v[VR_index:] + b * N_inf)**2 / a0)[::-1])[::-1]
+    integral_full = np.repeat(integral[0],v.shape[0])
+    integral_full[-integral.shape[0]:] = integral
+    p = N_inf/a0 * np.exp(- 0.5 * (- v + b * N_inf)**2/a0) * integral_full
+    return p,v
 
 def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmonic_mean = False):
     if N == None:
@@ -142,3 +140,19 @@ if __name__=="__main__":
     ani = FuncAnimation(fig, ud,init_func=ud.start, frames=np.linspace(0, T, nb_step), blit=True,repeat= False)
     plt.show()
     # ani.save("movie.mp4")
+
+    # test stationnary distribution
+    VF = 2
+    Vmin = -4
+    VR = 1
+    a0 = 1
+    a1 = 0
+    b = 1.5
+
+    h = 0.02
+    tau = 1e-4
+    T = 0.0405
+    p,v = stationnary_initial_cond(0.1924,1,1.5,2,-4,1,0.02)
+    plt.plot(v,p)
+    plt.show()
+
