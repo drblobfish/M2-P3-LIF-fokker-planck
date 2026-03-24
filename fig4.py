@@ -17,7 +17,7 @@ sigma0 = 0.25
 N_stat = 0.1377
 
 p_init = gaussian_initial_cond(v0,sigma0,VF,Vmin,h)
-p_stat,_ = stationnary_initial_cond(N_stat,a0,b,VF,Vmin,VR,h)
+p_stat,v = stationnary_initial_cond(N_stat,a0,b,VF,Vmin,VR,h)
 
 p2,Nl,_,traj = fokker_plank_solve(p_init,VF,Vmin,VR,a0,a1,b,h,tau,5,return_traj = True)
 time = np.linspace(0,5,Nl.shape[0])
@@ -26,7 +26,7 @@ entro = np.empty(traj.shape[0])
 for i in range(traj.shape[0]):
     entro[i] = entropy(traj[i,:],p_stat,h)
 
-fig,axs = plt.subplots(1,3)
+fig,axs = plt.subplots(1,3,layout="constrained",figsize=(15,5))
 
 axs[0].plot(v[1:-1],p_init,label="t=0")
 axs[0].plot(v[1:-1],traj[100,:],label="t=1")
@@ -43,5 +43,8 @@ axs[1].set_ylabel("N(t)")
 axs[2].plot(time,entro)
 axs[2].set_xlabel("t")
 axs[2].set_ylabel("S(t)")
+
+fig.savefig("figs/fig4.pdf")
+fig.savefig("figs/fig4.png")
 
 plt.show()
