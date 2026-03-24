@@ -80,21 +80,59 @@ Ce rapport présente premièrement cette méthode numérique. Ainsi que les choi
 
 = Méthode
 
+== Formulation en équilibre de flux
+
 La première ligne de @eq:fokkerplanck peut être reformulée en terme d'un flux.
 
-$ partial_t p + partial_v F = 0 $
+$ partial_t p + partial_v F = 0 $ <eq:equiflux>
 
 où 
 
 $ F(v,t) = -a partial_v p + h p $
 
 Cependant, le flux sortant en $V_F$, qui correspond à $N(t)$ doit sauter en $V_R$. Ce comportement peut être pris en compte en considérant le flux modifié :
-$ tilde(F)(v,t) = F(v,t) - N(t) bb(1)_(v >= V_R) $
+$ tilde(F)(v,t) = F(v,t) - N(t) bb(1)_(v >= V_R) $ <eq:F_tilde>
+
+== Reformulation de Scharfetter-Gummel
+
+On pose 
+$
+M(v,t) = exp(- ((v - b N(t))^2)/(2 a(N(t))))
+$
+
+On remarque que 
+$
+F(v,t) = a(N(t)) M(v,t) partial_v (p(v,t)/M(v,t))
+$ <eq:F_reform>
+
+== Discrétisation
+
+On choisi une valeur $V_("min")$ telle que $p(V_"min",t) approx 0$. On discrétise l'intervalle $\[V_"min" \, V_F \]$ en $n$ intervalles de longueur $h$, délimités par les points $v_0 \, v_1 dots, v_n$. Ce sont les points sur lesquelles $p$ sera discrétisé. Le flux $F$, sera lui évalué sur les points intermédiaires $v_(1/2) \, v_(1+ 1/2), dots , v_(n- 1/2)$.
 
 #figure(
-  image("../figs/discretisation.pdf", width: 80%),
+  image("figs/discretisation.pdf", width: 100%),
   caption: [Schéma de discrétisation],
 ) <discretisation>
+
+On discrétise le temps sur l'intervalle $\[0 \, T \]$ avec un pas de $tau$. On note lors $F_i^m$ et $p_i^m$ la valeur du flux et de la densité au point correspondant dans la discrétisation.
+
+== Différence finie
+
+@eq:equiflux peut être discrétisé avec une différence finie centrée $forall i in [|0,N|]$
+
+$
+(p_i^(m+1) - p_i^m)/ tau + (tilde(F)_(i+1/2)^m - tilde(F)_(i-1/2)^m)/h = 0
+$
+
+On discrétise également l'expression de $F$ dans @eq:F_reform avec une différence finie centrée. Avec @eq:F_tilde, on obtient, $forall i in [|1,N-2|]$,
+$
+tilde(F)_(i+1/2)^m = -a(N^m) M_(i+1/2)/h (p^(m+1)_(i+1)/M^m_(i+1) - p^(m+1)_(i)/M^m_(i))
+- N^m bb(1)_(v_(i+1/2) >= V_R)
+$
+
+$
+tilde(F)_(1/2) = tilde(F)_(N-1/2) = 0
+$
 
 = Résultat
 https://www.youtube.com/watch?v=Sw56snxPUMg
@@ -103,22 +141,6 @@ https://www.youtube.com/watch?v=jF3e-Q7j1z0
 = Conclusion
 
 = Annexe
-$
-forall i in [|0,N|] \
-(p_i^(m+1) - p_i^m)/ tau + (tilde(F)_(i+1/2)^m - tilde(F)_(i-1/2)^m)/h = 0
-$
-
-$
-forall i in [|1,N-2|] \
-tilde(F)_(i+1/2)^m = -a(N^m) M_(i+1/2)/h (p^(m+1)_(i+1)/M^m_(i+1) - p^(m+1)_(i)/M^m_(i))
-- N^m bb(1)_(v_(i+1/2) >= V_R)
-$
-$
-tilde(F)_(1/2) = 0
-$
-$
-tilde(F)_(N-1/2) = 0
-$
 
 ------
 $
@@ -208,11 +230,11 @@ mat(
 )
 =
 mat(
-  tilde(p)^(m+1)_1;
-  tilde(p)^(m+1)_2;
+  tilde(p)^(m)_1;
+  tilde(p)^(m)_2;
   dots.v;
-  tilde(p)^(m+1)_(N-2);
-  tilde(p)^(m+1)_(N-1);
+  tilde(p)^(m)_(N-2);
+  tilde(p)^(m)_(N-1);
 )
 $
 
