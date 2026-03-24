@@ -32,7 +32,12 @@ def stationnary_initial_cond(N_inf,a0,b,VF,Vmin,VR,h,N=None):
     p = N_inf/a0 * np.exp(- 0.5 * (- v + b * N_inf)**2/a0) * integral_full
     return p[1:-1],v
 
-def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmonic_mean = False):
+def entropy(p,p_stat,h):
+    def G(x):
+        return 0.5 * (x-1)**2
+    return np.sum(h*G(p/p_stat)*p_stat)
+
+def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmonic_mean = False,return_traj = False):
     if N == None:
         N = int(np.round((VF-Vmin)/h))
     else :
@@ -46,6 +51,8 @@ def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmoni
     p = p0.copy()
 
     Nhl = np.empty(nb_iter)
+    if return_traj :
+        traj = np.empty((nb_iter,p.shape[0]))
 
     # at each step
     for i in range(nb_iter):
@@ -72,8 +79,12 @@ def fokker_plank_solve(p0,VF,Vmin,VR,a0,a1,b,h,tau,T,N=None,nb_iter=None,harmoni
 
         sparray = sp.diags_array([subdiag,diagonal,surdiag],offsets=[-1,0,1],format="csr")
         p = spla.spsolve(sparray,p)
-
-    return p,Nhl,v
+        if return_traj:
+            traj[i,:] = p
+    if return_traj :
+        return p,Nhl,v,traj
+    else :
+        return p,Nhl,v
 
 class UpdateDist:
     def __init__(self,fig,ax,p,VF,Vmin,VR,a0,a1,b,h,tau,T,nb_step):
