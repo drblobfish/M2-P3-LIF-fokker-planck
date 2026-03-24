@@ -90,8 +90,8 @@ class UpdateDist:
     def __init__(self,fig,ax,p,VF,Vmin,VR,a0,a1,b,h,tau,T,nb_step):
         self.fig = fig
         self.ax = ax
-        self.p = np.zeros(N+1)
-        self.p[1:N] = p
+        self.p = np.zeros(p.shape[0]+2)
+        self.p[1:-1] = p
         self.VF = VF
         self.Vmin = Vmin
         self.VR = VR
@@ -103,7 +103,7 @@ class UpdateDist:
         self.T = T
         self.nb_step = nb_step
         self.N = int((VF-Vmin)/h)
-        self.v = np.linspace(Vmin,VF,N+1)
+        self.v = np.linspace(Vmin,VF,self.N+1)
         self.ln, = ax.plot(self.v, self.p)
         self.ax.set_ylim(0,2)
         self.ax.set(title = f"a = {a0}; b = {b}; VF = {VF}; VR = {VR}")
@@ -111,7 +111,7 @@ class UpdateDist:
     def start(self):
         return self.ln,self.time_text
     def __call__(self,frame):
-        self.p[1:N],_,_ = fokker_plank_solve(self.p[1:N],self.VF,self.Vmin,self.VR,self.a0,self.a1,self.b,self.h,self.tau,self.T/self.nb_step)
+        self.p[1:self.N],_,_ = fokker_plank_solve(self.p[1:self.N],self.VF,self.Vmin,self.VR,self.a0,self.a1,self.b,self.h,self.tau,self.T/self.nb_step)
         self.ln.set_data(self.v, self.p)
         self.time_text.set_text(f"t = {frame:.3f}")
         return self.ln,self.time_text
