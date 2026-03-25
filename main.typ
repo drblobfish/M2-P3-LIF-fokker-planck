@@ -98,6 +98,7 @@ où
 $ F(v,t) = -a partial_v p + h p $
 
 Cependant, le flux sortant en $V_F$, qui correspond à $N(t)$ doit sauter en $V_R$. Ce comportement peut être pris en compte en considérant le flux modifié :
+
 $ tilde(F)(v,t) = F(v,t) - N(t) bb(1)_(v >= V_R) $ <eq:F_tilde>
 
 == Reformulation de Scharfetter-Gummel
