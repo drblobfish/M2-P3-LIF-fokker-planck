@@ -1,28 +1,29 @@
 #import "@preview/unequivocal-ams:0.1.2": ams-article, theorem, proof
 #set math.equation(numbering: "(1)")
+#set text(lang: "fr")
+
 #show: ams-article.with(
   title: [Une méthode de différences finies pour la résolution numérique de l'équation de Fokker-Planck du modèle LIF],
   authors: (
     (
       name: "Jules Herrmann",
-      department: [Master Math-Mod],
+      department: [Master Mathématiques de la modélisation],
       organization: [Sorbonne Université],
       email: "jules.herrmann@etu.sorbonne-universite.fr",
     ),
   ),
-  abstract : [test],
   bibliography: bibliography("refs.bib"),
 )
 
 = Introduction
 
 Le modèle Intergration-et-tir avec fuite, en anglais Leaky Integrate and Fire (LIF), est un modèle classique
-en neuroscience. Introduit au début du XXeme siècle par Louis Lapicque, il décrit l'évolution du potentiel electrique
-d'un neurone au cours du temps. Ce modèle a pu être étendu et généralisé au cours du temps, notament par l'ajout de 
+en neuroscience. Introduit au début du XXeme siècle par Louis Lapicque, il décrit l'évolution du potentiel électrique
+d'un neurone au cours du temps. Ce modèle a pu être étendu et généralisé, notament par l'ajout de 
 comportement stochastique. Ainsi, son évolution non linéaire bruitée (NNLIF), basée sur
-une équation différentielle stochastique, modèlise les comportements de champ moyen d'un ensemble de neurones.
+une équation différentielle stochastique, modélise les comportements de champ moyen d'un ensemble de neurones.
 
-En l'absence de tir, l'évolution du potentiel $V$ est régi par l'équation stochastique suivante :
+En l'absence de tir, l'évolution du potentiel $V$ est régie par l'équation stochastique suivante :
 
 $
 d V = -(V - V_L) d t + mu d t + sigma d B_t
@@ -66,7 +67,7 @@ $
 
 Avec ce choix, $b < 0$ correspond à un réseau inhibiteur, et $b>0$ à un réseau excitateur.
 
-Dans leur article de 2011, #cite(<caceres_analysis_2011>,form:"prose"), ont posé les bases de l'étude de ce système. Ils ont caractérisé formellement le phénomène de _blow up_, dans lequel le taux de tir $N(t)$ diverge en temps fini. Si les blow up avaient été observés numériquement par le passé, ils ont prouvé leur existence dans le cas continue dans une famille de situations initiales. Ils ont également montré l'existence de situations présentant 0, 1 ou 2 solutions stationnaires.
+Dans leur article de 2011, #cite(<caceres_analysis_2011>,form:"prose"), ont posé les bases de l'étude de ce système. Ils ont caractérisé formellement le phénomène de _blow up_, dans lequel le taux de tir $N(t)$ diverge en temps fini. Si les blow up avaient été observés numériquement par le passé, ils ont prouvé leur existence dans le cas continu dans une famille de situations initiales. Ils ont également montré l'existence de situations présentant 0, 1 ou 2 solutions stationnaires.
 
 De nombreuses propriétés de ce système sont toujours inconnues. La stabilité des solutions stationnaires et les comportements asymptotiques du système sont mal comprises. Dans le cas linéaire, il est possible de montrer que l'entropie relative de la solution est strictement décroissante, ce qui permet de montrer la convergence de la solution vers une solution stationnaire dans certains cas.
 
@@ -74,13 +75,15 @@ Ce manque de résultat théorique complique le développement de méthodes numé
 
 Une approche générale utilisée pour résoudre numériquement les équations de Fokker-Planck est l'approche dite de Scharfetter-Gummel. Cette approche reformule l'équation, comme une équation de balance des flux. #cite(<almeida_energy_2018>)
 
-Dans leur article de 2020, #cite(<hu_structure_2020>,form:"prose") proposent une méthode numérique basée sur l'approche de Scharfetter-Gummel, et l'adapte pour prendre en compte le saut de flux. Cette approche satisfait plusieurs bonnes propriétés : elle est linéairement implicite et donc facile à résoudre numériquement, conserve la positivité de la densité et satisfait une version discrete de la propriété de l'entropie relative décroissante qui existe dans le cas continue.
+Dans leur article de 2020, #cite(<hu_structure_2020>,form:"prose") proposent une méthode numérique basée sur l'approche de Scharfetter-Gummel, et l'adapte pour prendre en compte le saut de flux. Cette approche satisfait plusieurs bonnes propriétés : elle est linéairement implicite et donc facile à résoudre numériquement, conserve la positivité de la densité et satisfait une version discrète de la propriété de l'entropie relative décroissante qui existe dans le cas continu.
 
 Ce rapport présente premièrement la méthode de discrétisation étudiée par l'article.
-Puis le détail de l'algorithme obtenu en utilisant la discrétisation proposée est exposée.
-Une seconde partie se donne pour but de répliquer les expériences numériques de l'article et se concentre plus particulierment sur le phénomène des _blow up_ et sur la décroissance de l'entropie relative.
+Puis le détail de l'algorithme obtenu en utilisant la discrétisation proposée est exposé.
+Une seconde partie se donne pour but de répliquer les expériences numériques de l'article et se concentre plus particulièrement sur le phénomène des _blow up_ et sur la décroissance de l'entropie relative.
 
 Malheureusement, certaines tentatives de réplications des résultats de l'article n'ont pas donné des résultats identiques. Ces résultats ne sont pas inclus dans la @resultat, mais sont discutés dans la @conclusion.
+
+#pagebreak()
 
 = Méthode
 
@@ -147,7 +150,7 @@ Cette discrétisation peut être manipulée (voir @annexe) pour obtenir la proc�
 1. $N^m <- a_0 * p_(n-1)^m / (h - a_1 * p_(n-1)^m)$
 2. $p_(n-1)^m <- p_(n-1)^m - tau/h N^m$
 3. $p_(V_R)^m <- p_(V_R)^m + tau/h N^m$
-4. Solve $A_m p^(m+1) = p^m$
+4. Résoudre $A_m p^(m+1) = p^m$
 
 Avec
 $A_m = 
@@ -171,7 +174,7 @@ mat(
 
 == Implémentation
 
-Cet algorithme a été implémenté en Python avec les librairies Numpy et Scipy. La matrice $A$ est stoquée dans une structure de donnée aux lignes compressées, afin de profiter de son caractère creuse.
+Cet algorithme a été implémenté en Python avec les librairies Numpy et Scipy. La matrice $A$ est stockée dans une structure de données aux lignes compressées, afin de profiter de son caractère creux.
 
 == Distribution Stationnaire
 
@@ -187,12 +190,12 @@ cases(
 )
 $ <eq:stationary>
 
-Si elle existe, une telle solution s'écrit sous la forme 
+D'après #cite(<caceres_analysis_2011>), si elle existe, une telle solution s'écrit sous la forme 
 $
 p^oo = N^oo /a(N^oo) exp(- h(v,N^oo )^2 /(2 a(N^oo))) integral_"max"(v,V_R)^V_F exp( h(omega ,N^oo )^2 /(2 a(N^oo))) d omega
 $
 
-Il peut exister 0,1 ou 2 valeurs $N^oo$ telles que $p^oo$ définit bien une densité de probabilité.
+Le même article à identifié qu'il peut exister 0,1 ou 2 valeurs $N^oo$ telles que $p^oo$ définit bien une densité de probabilité.
 
 == Entropie relative
 
@@ -206,11 +209,13 @@ où $G(x) = 1/2 (x-1)^2$ et $p^oo$ satisfait @eq:stationary.
 Dans le cas $b=0$, il y a existence et unicité de l'équation stationnaire. Il n'y a donc pas de problème pour définir $S$.
 Toujours dans ce cas, le théorème 3.4 de #cite(<hu_structure_2020>) montre que $S$ est décroissante au cours du temps.
 
+#pagebreak()
+
 = Résultats <resultat>
 
 == Blow up
 
-Il a été montré que la solution de l'équation peut exploser en temps fini. @fig:blowup_bottom et @fig:blowup_top montrent deux exemples de situations où un blow up à lieu. Ces blow up ont lieu dans le cas excitatoire, où le taux de tir est régi par une boucle de rétroaction positive. Une explication intuitive du phénomène est que lors d'un blow up, le taux de tir augmente, ce qui augmente la force du drift, et donc la vitesse à laquelle les potentiels se déplacent vers le potentiel de tir, ce qui contribue à augmenter le taux de tir.
+#cite(<caceres_analysis_2011>) a montré que la solution de l'équation peut exploser en temps fini. @fig:blowup_bottom et @fig:blowup_top montrent deux exemples de situations où un blow up a lieu. Ces blow up ont lieu dans le cas excitatoire, où le taux de tir est régi par une boucle de rétroaction positive. Une explication intuitive du phénomène est que lors d'un blow up, le taux de tir augmente, ce qui augmente la force du drift, et donc la vitesse à laquelle les potentiels se déplacent vers le potentiel de tir, ce qui contribue à augmenter le taux de tir.
 
 
 #figure(
@@ -230,7 +235,7 @@ Il a été montré que la solution de l'équation peut exploser en temps fini. @
 == Entropie relative
 
 La @fig:entro_lineaire montre un exemple de solution dans le cas $b=0$. Il existe une unique solution stationnaire du système $p^oo$, avec $N^oo = 0.1377$.
-Comme prédit dans le théorème 3.4 de #cite(<hu_structure_2020>), l'entropie relative de la solution par rapport à $p^oo$ est décroissante.
+Comme prédite dans le théorème 3.4 de #cite(<hu_structure_2020>), l'entropie relative de la solution par rapport à $p^oo$ est décroissante.
 Cela se traduit par une convergence de la solution vers $p^oo$.
 
 #figure(
@@ -253,6 +258,8 @@ La seconde, $p^oo_"instable"$, avec $N^oo = 2.319$ est instable. On peut voir qu
   (Droite) Évolution de l'entropie relative à la distribution stationnaire $p^oo_"instable"$],
 )
 
+#pagebreak()
+
 = Conclusion <conclusion>
 
 Ainsi, la méthode numérique présentée par #cite(<hu_structure_2020>) donne lieu à un algorithme assez simple, et son implémentation donne des résultats cohérents avec ceux de l'article original. Les phénomènes de blow up sont identiques, et on observe que la propriété de décroissance de l'entropie relative est vérifiée expérimentalement.
@@ -261,7 +268,9 @@ En revanche, l'estimation de l'ordre de convergence de la méthode ne donne pas 
 
 Il y a fort à parier que mon implémentation est érronée. Malheureusement, le code source utilisé pour les expériences numériques de #cite(<hu_structure_2020>) n'a pas été publié, ce qui complique la comparaison des deux méthodes.
 
-Il m'est avis que les domaines des mathématiques appliquées dans lesquels les expériences numériques jouent un rôle important devraient prendre exemple des mesures qui ont été prises dans d'autres domaines scientifiques pour faire face à la crise de la réplicabilité, en normalisant le fait de publier tout code source ayant permis de produire des résultats expérimentaux.
+Je pense que les domaines des mathématiques appliquées dans lesquels les expériences numériques jouent un rôle important devraient prendre exemple des mesures qui ont été prises dans d'autres domaines scientifiques pour faire face à la crise de la réplicabilité, en normalisant le fait de publier tout code source ayant permis de produire des résultats expérimentaux.
+
+#pagebreak()
 
 = Annexe
 <annexe>
@@ -376,3 +385,5 @@ mat(
   p^(m)_(N-2);
   p^(m)_(N-1) + tau/h N^m;
 )$
+
+#pagebreak()
