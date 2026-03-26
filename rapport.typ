@@ -83,7 +83,6 @@ Une seconde partie se donne pour but de répliquer les expériences numériques 
 
 Malheureusement, certaines tentatives de réplications des résultats de l'article n'ont pas donné des résultats identiques. Ces résultats ne sont pas inclus dans la @resultat, mais sont discutés dans la @conclusion.
 
-#pagebreak()
 
 = Méthode
 
@@ -210,7 +209,6 @@ où $G(x) = 1/2 (x-1)^2$ et $p^oo$ satisfait @eq:stationary.
 Dans le cas $b=0$, il y a existence et unicité de l'équation stationnaire. Il n'y a donc pas de problème pour définir $S$.
 Toujours dans ce cas, le théorème 3.4 de #cite(<hu_structure_2020>) montre que $S$ est décroissante au cours du temps.
 
-#pagebreak()
 
 = Résultats <resultat>
 
@@ -259,7 +257,6 @@ La seconde, $p^oo_"instable"$, avec $N^oo = 2.319$ est instable. On peut voir qu
   (Droite) Évolution de l'entropie relative à la distribution stationnaire $p^oo_"instable"$],
 )
 
-#pagebreak()
 
 = Conclusion <conclusion>
 
@@ -271,7 +268,6 @@ Il y a fort à parier que mon implémentation est érronée. Malheureusement, le
 
 Je pense que les domaines des mathématiques appliquées dans lesquels les expériences numériques jouent un rôle important devraient prendre exemple des mesures qui ont été prises dans d'autres domaines scientifiques pour faire face à la crise de la réplicabilité, en normalisant le fait de publier tout code source ayant permis de produire des résultats expérimentaux.
 
-#pagebreak()
 
 = Annexe
 <annexe>
@@ -387,4 +383,3 @@ mat(
   p^(m)_(N-1) + tau/h N^m;
 )$
 
-#pagebreak()
